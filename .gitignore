@@ -5,3 +5,4 @@ node_modules/
 web/public_js/bower_components/
 *.DS_Store
 nohup.out
+package-lock.json
