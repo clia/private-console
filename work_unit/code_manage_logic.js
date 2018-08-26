@@ -275,7 +275,7 @@ exports.createRemoteIndexWorkUnit = function(remoteIndex, filePath, contentType,
                     pythonCaller.call(pythonRuntimeDir, pythonFile, userArgs, function(remoteGenErr, genResult) {
                         if (errorCode.SUCCESS.code == remoteGenErr) {
                             //////////////////////////////////////
-                            // step 3, if successfully created tag binary file, upload binary to OSS
+                            // step 3, if successfully created tag binary file, upload binary
                             logger.info("remote " + remoteIndex.remote_name + " has successfully been generated");
                             outputPath = fileDir;
                             newACRemoteNumber = remoteIndex.remote_name
@@ -623,130 +623,7 @@ exports.fallbackRemoteIndexWorkUnit = function (remoteIndex, adminID, callback) 
 };
 
 exports.publishRemoteIndexWorkUnit = function (callback) {
-    var find = '\\\\';
-    var re = new RegExp(find, 'g');
-    var unixFilePath = (FILE_TEMP_PATH + "/").replace(re, '/');
-    var lios = unixFilePath.lastIndexOf('/');
-    var fileDir = unixFilePath.substring(0, lios);
-    var outputFileName = '';
-    var uploadedRIIds = [];
-    var sourceFileName = '';
-    var targetFileName = '';
-
-    var conditions = null;
-    conditions = {
-        status: enums.ITEM_PASS
-    };
-
-    logger.info("publish remote indexes");
-
-    //////////////////////////////////////
-    // step 1, find remote indexes whose status is PASSED
-    RemoteIndex.findRemoteIndexByCondition(conditions, function(findRemoteIndexErr, remoteIndexes) {
-        if(errorCode.SUCCESS.code == findRemoteIndexErr.code) {
-            logger.info("find remote indexes successfully, size of remote index list : " + remoteIndexes.length);
-            //////////////////////////////////////
-            async.eachSeries(remoteIndexes, function (remoteIndex, innerCallback) {
-                var remoteName = remoteIndex.remote;
-                var protocolName = remoteIndex.protocol;
-                var binFileName = "irda_" + protocolName + "_" + remoteName + ".bin";
-                logger.info("binary file name = " + binFileName);
-
-                // step 2, copy file to transfer path
-                sourceFileName = fileDir + "/" + binFileName;
-                targetFileName = fileDir + "/binary_transfer/" + binFileName;
-                var readStream = fs.createReadStream(sourceFileName);
-                var writeStream = fs.createWriteStream(targetFileName);
-                readStream.pipe(writeStream);
-                logger.info("copy remote binary object successfully : " + targetFileName);
-                fs.readFile(targetFileName, function(readFileErr, fileData) {
-                    if (readFileErr) {
-                        logger.error("read remote code binary file error : " + readFileErr);
-                        innerCallback();
-                    } else {
-                        logger.info("read remote binary file successfully, file size = " + fileData.length);
-                        var queryParams = new Map();
-                        queryParams.put("app_key", REQUEST_APP_KEY);
-                        queryParams.put("app_token", REQUEST_APP_TOKEN);
-
-                        var requestSender =
-                            new RequestSender(PRIMARY_SERVER_ADDRESS,
-                                PRIMARY_SERVER_PORT,
-                                uploadBinaryService,
-                                queryParams);
-                        var options = {
-                            https: false
-                        };
-                        requestSender.postSimpleFile(binFileName, fileData, 'application/octet-stream',
-                            options, function(errorCode, response) {
-                                if (errorCode.SUCCESS.code == errorCode.code) {
-                                    logger.info("upload file successfully to primary server");
-                                    uploadedRIIds.push(remoteIndex.id);
-                                } else {
-                                    logger.info("upload file failed to primary server");
-                                }
-                                innerCallback();
-                            });
-                    }
-                });
-            }, function(err) {
-                if (err) {
-                    logger.warn("failed to upload some item of remote indexes");
-                } else {
-                    logger.info("successfully uploaded all the binary files associated with passed remote indexes");
-                }
-                //////////////////////////////////////
-                // step 3, find remote index items whose status is PASSED from DB
-                logger.info(JSON.stringify(uploadedRIIds));
-                conditions = {
-                    id: uploadedRIIds
-                };
-                RemoteIndex.findRemoteIndexByCondition(conditions, function(findRemoteIndexesErr, remoteIndexes) {
-                    logger.info(JSON.stringify(remoteIndexes));
-                    //////////////////////////////////////
-                    // step 4, send request to primary server with found remote indexes
-                    if (errorCode.SUCCESS.code == findRemoteIndexesErr.code &&
-                        undefined != remoteIndexes && null != remoteIndexes && remoteIndexes.length > 0) {
-                        // send out going HTTP request to primary server
-                        var queryParams = new Map();
-                        queryParams.put("app_key", REQUEST_APP_KEY);
-                        queryParams.put("app_token", REQUEST_APP_TOKEN);
-
-                        var requestSender =
-                            new RequestSender(PRIMARY_SERVER_ADDRESS,
-                                PRIMARY_SERVER_PORT,
-                                publishRemoteIndexService,
-                                queryParams);
-
-                        requestSender.sendPostRequest(remoteIndexes,
-                            function(publishRemoteIndexesRequestErr, publishRemoteIndexesResponse) {
-                                if(errorCode.SUCCESS.code == publishRemoteIndexesRequestErr &&
-                                    JSON.parse(publishRemoteIndexesResponse).status.code == errorCode.SUCCESS.code) {
-                                    logger.info("send remote indexes publish request successfully");
-                                    // continue updating the status of brand in local server
-                                    async.eachSeries(remoteIndexes, function (remoteIndex, innerCallback) {
-                                        RemoteIndex.publishRemoteIndex(remoteIndex.id, enums.ITEM_VALID,
-                                            function(publishRemoteIndexErr) {
-                                                innerCallback();
-                                            });
-                                    }, function (err) {
-                                        callback(errorCode.SUCCESS);
-                                    });
-                                } else {
-                                    logger.info("send remote publish request failed");
-                                    callback(errorCode.FAILED);
-                                }
-                            });
-                    } else {
-                        callback(findRemoteIndexesErr);
-                    }
-                });
-            });
-        } else {
-            logger.warn("remote indexes list is empty");
-            callback(errorCode.FAILED);
-        }
-    });
+    callback(errorCode.SUCCESS);
 };
 
 exports.createBrandWorkUnit = function (brand, adminID, callback) {
@@ -778,44 +655,7 @@ exports.createBrandWorkUnit = function (brand, adminID, callback) {
 };
 
 exports.publishBrandsWorkUnit = function (callback) {
-    var conditions = {
-        status: enums.ITEM_VERIFY
-    };
-    Brand.findBrandByConditions(conditions, function(findBrandErr, brands) {
-        if(errorCode.SUCCESS.code == findBrandErr.code && null != brands && brands.length > 0) {
-            logger.info("unpublished brand list has been found");
-            // send out going HTTP request to primary server
-
-            var queryParams = new Map();
-            queryParams.put("app_key", REQUEST_APP_KEY);
-            queryParams.put("app_token", REQUEST_APP_TOKEN);
-
-            var requestSender =
-                new RequestSender(PRIMARY_SERVER_ADDRESS, PRIMARY_SERVER_PORT, publishBrandService, queryParams);
-
-            requestSender.sendPostRequest(brands, function(publishBrandRequestErr, publishBrandsResponse) {
-                if(errorCode.SUCCESS.code == publishBrandRequestErr &&
-                    JSON.parse(publishBrandsResponse).status.code == errorCode.SUCCESS.code) {
-                    logger.info("send brand publish request successfully");
-                    // continue updating the status of brand in local server
-                    async.eachSeries(brands, function (brand, innerCallback) {
-                        brand.status = enums.ITEM_VALID;
-                        Brand.updateBrandByID(brand.id, brand, function(updateBrandErr, updatedBrand) {
-                            innerCallback();
-                        });
-                    }, function (err) {
-                        callback(errorCode.SUCCESS);
-                    });
-                } else {
-                    logger.info("send brand publish request failed");
-                    callback(errorCode.FAILED);
-                }
-            });
-        } else {
-            logger.info("there is no brand need to be published");
-            callback(errorCode.SUCCESS);
-        }
-    });
+    callback(errorCode.SUCCESS);
 };
 
 exports.createProtocolWorkUnit = function(protocol, filePath, contentType, adminID, callback) {
