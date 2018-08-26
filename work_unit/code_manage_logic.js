@@ -164,7 +164,7 @@ exports.downloadRemoteBinCachedWorkUnit = function(remoteIndexID, callback) {
                 } else {
                     logger.info("file " + localBinFileName + " does not exist");
                     error = errorCode.FAILED;
-                    callback(error, NULL);
+                    callback(error, null);
                 }
             });
         } else {

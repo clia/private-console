@@ -1232,7 +1232,7 @@ function onFilterCategoryChange() {
         case CATEGORY_AIR_CLEANER:
             showFilterBrandSelector();
             break;
-        case CATEGORY_DYSONS:
+        case CATEGORY_DYSON:
             showFilterBrandSelector();
             break;
         default:
