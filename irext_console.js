@@ -57,29 +57,29 @@ function tokenValidation (req, res, next) {
         token = bodyParam.token;
     }
 
-    if (req.url.indexOf("/irext/int/list_remote_indexes") != -1) {
+    if (req.url.indexOf("/irext/int/list_remote_indexes") !== -1) {
         // override for get method
         adminID = req.query.admin_id;
         token = req.query.token;
     }
-    if (req.url.indexOf("/irext/int/search_remote_indexes") != -1) {
+    if (req.url.indexOf("/irext/int/search_remote_indexes") !== -1) {
         // override for get method
         adminID = req.query.admin_id;
         token = req.query.token;
     }
-    if (req.url.indexOf("/irext/int/download_remote_index") != -1) {
+    if (req.url.indexOf("/irext/int/download_remote_index") !== -1) {
         // override for get method
         adminID = req.query.admin_id;
         token = req.query.token;
     }
-    if (req.url.indexOf("/irext/int") != -1) {
+    if (req.url.indexOf("/irext/int") !== -1) {
         var contentType = req.get("content-type");
         if (null != contentType && contentType.indexOf("multipart/form-data") != -1) {
             // request of content type of multipart/form-data would be validated inside each service
             next();
         } else {
             certificateLogic.verifyTokenWorkUnit(adminID, token, function(validateTokenErr) {
-                if(errorCode.SUCCESS.code != validateTokenErr.code) {
+                if(errorCode.SUCCESS.code !== validateTokenErr.code) {
                     var fakeResponse = {
                         status: validateTokenErr,
                         entity: null
@@ -91,7 +91,7 @@ function tokenValidation (req, res, next) {
                 }
             });
         }
-    } else if (req.url.indexOf("/irext/nav/nav_to_url") != -1) {
+    } else if (req.url.indexOf("/irext/nav/nav_to_url") !== -1) {
         var page = bodyParam.page;
         var pageCode = page.indexOf("code");
         var pageDoc = page.indexOf("doc");
