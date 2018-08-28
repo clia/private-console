@@ -19,11 +19,10 @@ exports.setupEnvironment = function () {
     REDIS_HOST = "localhost";
     REDIS_PORT = "6379";
     REDIS_PASSWORD = null;
-    FILE_TEMP_PATH = "~/home/your_name/rc_extension";
+    FILE_TEMP_PATH = require('os').homedir() + "/rc_extension";
     PYTHON_PATH = "/usr/bin/python";
-    LISTEN_PORT = "80";
+    LISTEN_PORT = "8301";
     SERVER_ADDRESS = "localhost";
     EXTERNAL_SERVER_ADDRESS = "irext.net";
     EXTERNAL_SERVER_PORT = "80";
-    SOCKET_0_ADDRESS = "http://localhost";
 };

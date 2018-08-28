@@ -8,7 +8,7 @@
     <meta name="screen-orientation" content="portrait">
     <meta name="description" content="irext application">
     <meta name="author" content="strawmanbobi">
-    <title>IRext 控制台</title>
+    <title>IRext 本地控制台</title>
 
     <link rel="stylesheet" href="../public_js/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../public_js/bower_components/toastr/toastr.min.css">
@@ -25,7 +25,7 @@
                     <li role="presentation"><a href="#" onclick="gotoIndex();">退出</a></li>
                 </ul>
             </nav>
-            <h3>IRext</h3>
+            <h3>IRext 本地控制台</h3>
         </div>
     </div>
     <div class="container">
@@ -85,11 +85,11 @@
                         <span class="glyphicon glyphicon-cloud-download" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
 
-                    <button id="transfer_bin_button" class="btn btn-normal btn-primary" onclick="onTransferBin();" style="font-size: 14px;">
+                    <button id="transfer_bin_button" class="btn btn-normal btn-primary" onclick="onTransferBin();" style="font-size: 14px; display: none;">
                         <span class="glyphicon glyphicon-import" style="vertical-align:middle; margin-bottom: 3px;"></span>
                     </button>
                 </div>
-                <button id="publish_button" class="btn btn-normal btn-success" onclick="onPublishRemote();" style="font-size: 14px;">
+                <button id="publish_button" class="btn btn-normal btn-success" onclick="onPublishRemote();" style="font-size: 14px; display: none;">
                     <span class="glyphicon glyphicon-send" style="vertical-align:middle; margin-bottom: 3px;"></span>
                 </button>
                 <button id="search_bin_button" class="btn btn-normal btn-default" onclick="onSearchRemote();" style="font-size: 14px;">
@@ -231,7 +231,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">搜索码表</h4>
+                    <h4 class="modal-title">搜索编码</h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group" style="max-height: 25px;">
@@ -255,7 +255,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">删除码表</h4>
+                    <h4 class="modal-title">删除编码</h4>
                 </div>
                 <div class="modal-body">
                     <div id="delete_hint"></div>
@@ -275,10 +275,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">回退码表</h4>
+                    <h4 class="modal-title">回退编码</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="fallback_hint">确认要回退码表到待验证状态吗？</div>
+                    <div id="fallback_hint">确认要回退编码到待验证状态吗？</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" onclick="fallbackRemote();">确定</button>
@@ -295,7 +295,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">验证码表</h4>
+                    <h4 class="modal-title">验证编码</h4>
                 </div>
                 <div class="modal-body">
                     <div id="verify_hint"></div>
@@ -315,7 +315,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">发布码表</h4>
+                    <h4 class="modal-title">发布编码</h4>
                 </div>
                 <div class="modal-body">
                     <div id="publish_hint"></div>
@@ -336,7 +336,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">提交码表文件</h4>
+                    <h4 class="modal-title">提交编码文件</h4>
                 </div>
                 <div class="modal-body">
                     <iframe name="post_iframe" id="post_iframe" style="border: none; width: 100%; height: 50px;">

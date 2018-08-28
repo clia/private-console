@@ -324,7 +324,7 @@ exports.createRemoteIndex = function (req, res) {
         logger.error("formidable parse form error : " + err);
         res.send("<html>" +
             "<body> " +
-            "<div style='width: 100%; text-align: center; color: #FF0000'>码表文件提交失败</div>" +
+            "<div style='width: 100%; text-align: center; color: #FF0000'>编码文件提交失败</div>" +
             "</body>" +
             "</html>");
         res.end();
@@ -346,19 +346,19 @@ exports.createRemoteIndex = function (req, res) {
                 if(errorCode.SUCCESS.code == createRemoteIndexErr.code) {
                     res.send("<html>" +
                         "<body> " +
-                        "<div style='width: 100%; text-align: center;'>码表文件提交成功</div>" +
+                        "<div style='width: 100%; text-align: center;'>编码文件提交成功</div>" +
                         "</body>" +
                         "</html>");
                 } else if (errorCode.DUPLICATED_REMOTE_CODE.code == createRemoteIndexErr.code) {
                     res.send("<html>" +
                         "<body> " +
-                        "<div style='width: 100%; text-align: center; color: #FF7777'>码表重复，无需新增</div>" +
+                        "<div style='width: 100%; text-align: center; color: #FF7777'>编码重复，无需新增</div>" +
                         "</body>" +
                         "</html>");
                 } else {
                     res.send("<html>" +
                         "<body> " +
-                        "<div style='width: 100%; text-align: center; color: #FF0000'>码表文件提交失败</div>" +
+                        "<div style='width: 100%; text-align: center; color: #FF0000'>编码文件提交失败</div>" +
                         "</body>" +
                         "</html>");
                 }
