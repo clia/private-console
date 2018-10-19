@@ -13,6 +13,7 @@ var enums = new Enums();
 //noinspection JSUnresolvedVariable
 exports.setupEnvironment = function () {
     MYSQL_DB_SERVER_ADDRESS = "localhost";
+    MYSQL_DB_PORT = "3306";
     MYSQL_DB_NAME = "irext";
     MYSQL_DB_USER = "root";
     MYSQL_DB_PASSWORD = "root";

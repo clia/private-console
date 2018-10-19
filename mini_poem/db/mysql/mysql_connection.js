@@ -9,11 +9,12 @@ require('../../configuration/constants');
 
 var ormOpt;
 
-exports.setMySQLParameter = function(dbHost, dbName, dbUser, dbPassword) {
+exports.setMySQLParameter = function(dbHost, dbPort, dbName, dbUser, dbPassword) {
     logger.info("initialize mysql connection, user = " + dbUser);
     ormOpt = {
         protocol: "mysql",
         hostname: dbHost,
+        port: dbPort,
         database: dbName,
         user: dbUser,
         password: dbPassword,

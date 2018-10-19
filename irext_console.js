@@ -36,7 +36,7 @@ systemConfig.setupEnvironment();
 var serverListenPort = LISTEN_PORT;
 
 console.log("initializing MySQL connection to : " + MYSQL_DB_SERVER_ADDRESS + ":" + MYSQL_DB_NAME);
-dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
+dbConn.setMySQLParameter(MYSQL_DB_SERVER_ADDRESS, MYSQL_DB_PORT, MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PASSWORD);
 
 require('./routes');
 
